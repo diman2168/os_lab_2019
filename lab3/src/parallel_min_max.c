@@ -130,13 +130,6 @@ int main(int argc, char **argv) {
 	int *array = malloc(sizeof(int) * array_size);
 	GenerateArray(array, array_size, seed);
 	
-	for(int i=0;i<array_size;i++){
-	    
-	    //printf("%d \n",array[i]);
-	    
-	}
-	
-	
 	int active_child_processes = 0;
 	
 
@@ -149,8 +142,7 @@ int main(int argc, char **argv) {
 		}
 	}
 	
-	const char path_to_save[] = "trash/file_desc_";
-	
+	const char path_to_save[] = "data_file";
 	
 	int file_desc[pnum][2][2];
 	
@@ -181,9 +173,9 @@ int main(int argc, char **argv) {
 			int end = (i + 1) * array_size / pnum;
 			end = end > array_size ? array_size : end;
 		
-		   // printf("%d %d \n",begin,end);
+		   
 			struct MinMax min_max = GetMinMax(array, begin, end);
-            //printf("%d %d \n\n",min_max.min, min_max.max);
+            
 
 			if (with_files) {
 				
