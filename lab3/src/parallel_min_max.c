@@ -39,6 +39,7 @@ int main(int argc, char **argv) {
 		
 		switch (c) {
 			case 0:
+            /*
 				switch (option_index) {
                     case 0:
                         seed = atoi(optarg);
@@ -74,7 +75,7 @@ int main(int argc, char **argv) {
 				    defalut:
 					    printf("Index %d is out of options\n", option_index);
 				}
-				break;
+				break;*/
 			case 'f':
 				with_files = true;
 				break;
@@ -160,7 +161,8 @@ int main(int argc, char **argv) {
   
 	for (int i = 0; i < pnum; i++) {
 		pid_t child_pid = fork();
-		if (child_pid >= 0) {
+		if (child_pid >= 0) 
+        {
 		// successful fork
 		active_child_processes += 1;
 		if (child_pid == 0) {
