@@ -33,7 +33,7 @@ static void sig_alarm(int sigg)
         kill(child_pid[i], SIGKILL);
     }
     while (active_child_processes >= 0) {
-        // your code here
+        
         int wpid = waitpid(-1, NULL, WNOHANG);
         printf("%d\n", active_child_processes);
         if(wpid == -1)
@@ -185,12 +185,6 @@ int main(int argc, char **argv) {
 	int *array = malloc(sizeof(int) * array_size);
 	GenerateArray(array, array_size, seed);
 	
-	for(int i = 0; i < array_size;i++){
-	    
-	    //printf("%d \n",array[i]);	    
-	}
-	
-	
 	if (pnum > array_size){
 		if(array_size > 3){		  
 			pnum = array_size/2;
@@ -200,7 +194,7 @@ int main(int argc, char **argv) {
 		}
 	}
 	
-	const char path_to_save[] = "trash/file_desc_";
+	const char path_to_save[] = "data_file";
 	
 	
 	int file_desc[pnum][2][2];
