@@ -17,7 +17,7 @@ char *cptr = "This message is output by the function showit()\n"; /* Static */
 char buffer1[25];
 int showit(); /* Function prototype */
 
-main() {
+void main() {
   int i = 0; /* Automatic variable */
 
   /* Printing addressing information */
@@ -37,7 +37,7 @@ main() {
 } /* end of main function */
 
 /* A function follows */
-int showit(p) char *p;
+int showit(char *p)
 {
   char *buffer2;
   SHW_ADR("buffer2", buffer2);
