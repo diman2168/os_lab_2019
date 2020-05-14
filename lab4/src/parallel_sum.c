@@ -63,11 +63,11 @@ int main(int argc, char **argv) {
 	while (true) {
     //int current_optind = optind ? optind : 1;
 
-    const char* short_options = "s:t:a:p";
+    const char* short_options = "s:a:t:p";
     
     static struct option options[] = {{"seed", required_argument, 0, 's'},
-                                      {"threads_num", required_argument, 0, 't'},
                                       {"array_size", required_argument, 0, 'a'},
+                                      {"threads_num", required_argument, 0, 't'},
 									  {"print_array", no_argument, 0, 'p'},
                                       {0, 0, 0, 0}};
 
@@ -91,23 +91,23 @@ int main(int argc, char **argv) {
 				}
 				case 1:
 				{
-					threads_num = atoi(optarg);
+					array_size = atoi(optarg);
 					// your code here
 					// error handling
-					if (threads_num <= 0) {
-						printf("Threads num is a positive number\n");
+					if (array_size <= 0) {
+						printf("Array size is a positive number\n");
 						return 1;
 					}
 					break;
 				}
 				case 2:
 				{
-					array_size = atoi(optarg);
+					threads_num = atoi(optarg);
 					// your code here
 					// error handling
-					if(array_size <= 0)
+					if(threads_num <= 0)
 					{
-						printf("Array size is a positive number\n");
+						printf("Threads is a positive number\n");
 						return 1;
 					}
 
