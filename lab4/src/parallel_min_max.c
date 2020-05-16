@@ -22,7 +22,7 @@ int active_child_processes = 0;
 pid_t* child_pid;
 static void sig_alarm(int sigg)
 {
-	printf("Time's up. . .\n");
+	printf("Timeout exceeded. . .\n");
 	for (int i = 0; i < pnum; ++i)
 	{
 		kill(child_pid[i], SIGKILL);
@@ -134,13 +134,13 @@ int main(int argc, char** argv) {
 
 	int* array = malloc(sizeof(int) * array_size);
 	GenerateArray(array, array_size, seed);
-
+/*
 	for (int i = 0; i < array_size; i++) {
 
 		printf("%d \n", array[i]);
 
 	}
-
+*/
 
 	int active_child_processes = 0;
 
@@ -171,7 +171,7 @@ int main(int argc, char** argv) {
 	if (timeout != 0) {
 
 		printf("\nTimeout is %d second\n", timeout);
-		printf("Sleep is %d second\n\n", timeout * 2);
+		printf("Sleep is %d second\n\n", timeout + 3);
 
 		if (signal(SIGALRM, sig_alarm))
 		{
@@ -196,7 +196,7 @@ int main(int argc, char** argv) {
 
 				// parallel somehow
 
-				sleep(timeout * 2);
+				sleep(timeout + 3);
 
 				int begin = i * array_size / pnum;
 
