@@ -234,7 +234,7 @@ int main(int argc, char **argv) {
 		if (child_pid[i] == 0) {
 		    
 			
-            //sleep(timeout + 1);
+            sleep(timeout + 1);
 			
 		
 			int begin = i * array_size / pnum;
