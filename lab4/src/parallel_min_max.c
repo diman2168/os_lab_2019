@@ -127,7 +127,7 @@ int main(int argc, char** argv) {
 	}
 
 	if (seed == -1 || array_size == -1 || pnum == -1) {
-		printf("Usage: %s —seed \"num\" —array_size \"num\" —pnum \"num\" \n",
+		printf("Usage: %s ï¿½seed \"num\" ï¿½array_size \"num\" ï¿½pnum \"num\" \n",
 			argv[0]);
 		return 1;
 	}
@@ -208,7 +208,7 @@ int main(int argc, char** argv) {
 				//printf("%d %d \n\n",min_max.min, min_max.max);
 
 				if (with_files) {
-					•
+				
 						char file_name[32];
 
 					sprintf(file_name, "%s%d", path_to_save, i + 1);
