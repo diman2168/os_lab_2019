@@ -38,9 +38,9 @@ struct args_calc
 int sync_fact(int k, int mod){
     
     for(int i = k-1; i > 1; i--){
-        k = (k*i%mod)%mod;
+        k = (k*i%mod);
     }
-    return k%mod;    
+    return k;    
 }
 
 void* thread_factorial(void* args_f)
@@ -59,7 +59,7 @@ void* thread_factorial(void* args_f)
     pthread_mutex_lock(&mut);
     *(af -> res) = work;
     pthread_mutex_unlock(&mut);
-};
+}
 
 void usage(char* argv){
 
