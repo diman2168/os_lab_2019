@@ -26,20 +26,18 @@
 
 pthread_mutex_t mut = PTHREAD_MUTEX_INITIALIZER;
 
-typedef unsigned long long ull;
-
 struct args_calc
 {
-    ull     start;
-    ull     end;
-    ull     mod;
-    ull*    res;
+    int     start;
+    int     end;
+    int     mod;
+    int*    res;
     
 };
 
-ull sync_fact(ull k, ull mod){
+int sync_fact(int k, int mod){
     
-    for(ull i = k-1; i > 1; i--){
+    for(int i = k-1; i > 1; i--){
         k = (k*i%mod)%mod;
     }
     return k%mod;    
@@ -48,13 +46,13 @@ ull sync_fact(ull k, ull mod){
 void* thread_factorial(void* args_f)
 {
     struct args_calc* af = (struct args_calc*)args_f;
-    ull start = af -> start;
-    ull end =   af -> end;
-    ull mod =   af -> mod;
+    int start = af -> start;
+    int end =   af -> end;
+    int mod =   af -> mod;
 
-    ull work = start;
+    int work = start;
 
-    for(ull i = start + 1; i <= end; i ++)
+    for(int i = start + 1; i <= end; i ++)
     {
         work = (work * (i%mod))%mod;
     }
@@ -71,8 +69,8 @@ void usage(char* argv){
 
 int main(int argc, char **argv)
 {
-    ull k = -1;
-    ull mod = -1;
+    int k = -1;
+    int mod = -1;
     int pnum = -1;
     
     while (true)
@@ -193,8 +191,8 @@ int main(int argc, char **argv)
     struct args_calc* ac = malloc(pnum * sizeof(struct args_calc));
         
     int status;
-    ull final_res = 1;
-    ull block = k / pnum;
+    int final_res = 1;
+    int block = k / pnum;
 
     struct timeval start_time;
     gettimeofday(&start_time, NULL);
