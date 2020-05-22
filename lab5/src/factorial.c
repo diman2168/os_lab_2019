@@ -76,19 +76,21 @@ int main(int argc, char **argv)
     return 1;
   }
   struct fact_args args[threads_num];
-  int part=fact_n/threads_num;
-  for(int i=0;i<threads_num;i++){
-      args[i].begin=i*part+1;
-      args[i].end=(i == (threads_num - 1) ) ? fact_n: (i + 1) * part;
-      args[i].mod=mod_n;
+  int part = fact_n / threads_num;
+  printf("test: %d", part);
+  for(int i = 0; i < threads_num; i++){
+      args[i].begin = i*part+1;
+      args[i].end = (i == (threads_num - 1) ) ? fact_n : (i + 1) * part;
+      args[i].mod = mod_n;
   }
-  for(int i=0;i<threads_num;i++){
-      if (pthread_create(&threads[i], NULL, (void *)ParFact, (void *)&args[i])) {
+  for(int i = 0; i < threads_num; i++){
+      if (pthread_create(&threads[i], NULL, (void *)ParFact, (void *)&args[i])) 
+    {
       printf("Error: pthread_create failed!\n");
       return 1;
     }
   }
-  for(int i=0;i<threads_num;i++){
+  for(int i = 0; i < threads_num; i++){
     if (pthread_join(threads[i], NULL) != 0) {
     perror("pthread_join");
     exit(1);
@@ -99,14 +101,14 @@ int main(int argc, char **argv)
 }
 
 void ParFact(void* args){
-    struct fact_args* str=(struct fact_args*)args;
+    struct fact_args* str = (struct fact_args*)args;
     int buf=1;
-    for(int i=str->begin;i<=str->end;i++){
-        buf=((buf*i)%str->mod);
+    for(int i=str->begin; i<=str->end; i++){
+        buf = ((buf*i)%str->mod);
         printf("Buf - %d\n",buf);
     }
 
     pthread_mutex_lock(&mut);
-    factorial=(factorial*buf)%str->mod;
+    factorial = (factorial*buf)%str->mod;
     pthread_mutex_unlock(&mut);
 }
