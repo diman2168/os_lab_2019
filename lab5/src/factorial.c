@@ -6,7 +6,7 @@
 #include <getopt.h>
 
 pthread_mutex_t mut = PTHREAD_MUTEX_INITIALIZER;
-int factorial = 1;
+int rem_div = 1;
 
 struct fact_args {
     int begin;
@@ -96,19 +96,19 @@ int main(int argc, char **argv)
     exit(1);
     }
   }
-  printf("Factorial - %d\n",factorial);
+  printf("Remainder of division - %d\n",rem_div);
 
 }
 
 void ParFact(void* args){
     struct fact_args* str = (struct fact_args*)args;
     int buf=1;
-    for(int i=str->begin; i<=str->end; i++){
+    for(int i = str->begin; i <= str->end; i++){
         buf = ((buf*i)%str->mod);
         printf("Buf - %d\n",buf);
     }
 
     pthread_mutex_lock(&mut);
-    factorial = (factorial*buf)%str->mod;
+    rem_div = (rem_div*buf)%str->mod;
     pthread_mutex_unlock(&mut);
 }
