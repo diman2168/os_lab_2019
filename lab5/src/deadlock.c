@@ -46,6 +46,7 @@ void do_one_thing() {
 }
 
 void do_another_thing() {
+    //for (int k = 0; k< 500000; k++);
     pthread_mutex_lock(&mut2);
     printf("doing another thing\n");
     for (int k = 0; k < 500000; k++);
