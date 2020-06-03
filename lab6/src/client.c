@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
 #include <errno.h>
 #include <getopt.h>
 #include <netdb.h>
@@ -10,12 +11,14 @@
 #include <netinet/ip.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+
 #include "MultMod.h"
 
 struct Server {
   char ip[255];
   int port;
 };
+
 
 bool ConvertStringToUI64(const char *str, uint64_t *val) {
   char *end = NULL;
@@ -32,11 +35,10 @@ bool ConvertStringToUI64(const char *str, uint64_t *val) {
   return true;
 }
 
-
 int main(int argc, char **argv) {
   uint64_t k = -1;
   uint64_t mod = -1;
-  char servers[255] = {'\0'}; 
+  char servers[255] = {'\0'}; // TODO: explain why 255
 
   while (true) {
     int current_optind = optind ? optind : 1;
@@ -86,22 +88,29 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-    int servers_num = 0;
-    FILE* file;
-    file = fopen(servers, "r");
-    fscanf(file, "%d\n", &servers_num);
-    struct Server* to = malloc(sizeof(struct Server) * servers_num);
-    printf("Here is %d Servers:\n\n", servers_num);
-    for(int i = 0; i < servers_num; i++)
-    {
-        fscanf(file, "%s %d\n", to[i].ip, &to[i].port);
-        printf("%s:%d\n", to[i].ip, to[i].port);
-    }
-    fclose(file);
-    printf("\n");
-    const int block = k / servers_num;
-    int* sck = malloc(sizeof(int) * servers_num);
-    uint64_t res = 1;
+
+  // TODO: for one server here, rewrite with servers from file
+  int servers_num = 0;
+  FILE* file;
+  file = fopen(servers,"r");
+  fscanf(file, "%d\n", &servers_num);
+  struct Server *to = malloc(sizeof(struct Server) * servers_num);
+  printf("Using %d servers:\n\n", servers_num);
+
+  for (int i = 0; i < servers_num; i++)
+  {
+      fscanf(file, "%s %d\n", to[i].ip, &to[i].port);
+      printf("%s:%d\n", to[i].ip, to[i].port);
+  }
+  fclose(file);
+  printf("\n");
+
+  // TODO: delete this and parallel work between servers
+  const int block = k / servers_num;
+  int* sck = malloc(sizeof(int) * servers_num);
+  uint64_t res = 1;
+ 
+
   // TODO: work continiously, rewrite to make parallel
   for (int i = 0; i < servers_num; i++) {
     struct hostent *hostname = gethostbyname(to[i].ip);
@@ -109,17 +118,17 @@ int main(int argc, char **argv) {
       fprintf(stderr, "gethostbyname failed with %s\n", to[i].ip);
       exit(1);
     }
+
     struct sockaddr_in server;
     server.sin_family = AF_INET;
     server.sin_port = htons(to[i].port);
     server.sin_addr.s_addr = *((unsigned long *)hostname->h_addr_list[0]);
 
     sck[i] = socket(AF_INET, SOCK_STREAM, 0);
-        if (sck[i] < 0) 
-        {
-            fprintf(stderr, "Socket creation failed!\n");
-            exit(1);
-        }
+    if (sck[i] < 0) {
+      fprintf(stderr, "Socket creation failed!\n");
+      exit(1);
+    }
 
     if (connect(sck[i], (struct sockaddr *)&server, sizeof(server)) < 0) {
       fprintf(stderr, "Connection failed\n");
@@ -131,14 +140,13 @@ int main(int argc, char **argv) {
     uint64_t begin = block * i + 1;
     uint64_t end;
 
- if (i+1 == servers_num)
-        {
-            end = block * (i+1) + k % servers_num;
-        }
-        else
-        {
-            end = block * (i+1);
-        } 
+    if (i+1 == servers_num)
+    {
+        end = block * (i+1) + k % servers_num;
+    }
+    else {
+        end = block * (i+1);
+    }
 
     char task[sizeof(uint64_t) * 3];
     memcpy(task, &begin, sizeof(uint64_t));
@@ -161,11 +169,10 @@ int main(int argc, char **argv) {
     uint64_t answer = 0;
     memcpy(&answer, response, sizeof(uint64_t));
     res = MultModulo(res, answer, mod);
-  
-    
+
     close(sck[i]);
   }
-    printf("%lu! mod %lu = %lu\n", k, mod, res);
+  printf("%lu! mod %lu = %lu\n", k, mod, res);
   free(to);
 
   return 0;
