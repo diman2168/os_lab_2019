@@ -159,11 +159,24 @@ int main(int argc, char **argv) {
       fprintf(stdout, "Receive: %llu %llu %llu\n", begin, end, mod);
 
       struct FactorialArgs args[tnum];
+      int bb = end - begin + 1;
+      if( tnum > bb){
+          tnum = bb;
+      }
+      uint64_t block = bb/tnum;
+
       for (uint32_t i = 0; i < tnum; i++) {
         // TODO: parallel somehow
-        args[i].begin = 1;
-        args[i].end = 1;
+        args[i].begin = begin + block*i;
         args[i].mod = mod;
+
+        if (i+1 == tnum){
+            args[i].end = begin - 1 + block * (i+1) + bb % tnum;
+        }
+        else{
+            args[i].end = begin - 1 + block * (i+1);
+        }
+        printf("\t%lu to %lu\n",args[i].begin, args[i].end);
 
         if (pthread_create(&threads[i], NULL, ThreadFactorial,
                            (void *)&args[i])) {
